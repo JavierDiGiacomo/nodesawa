@@ -6,8 +6,8 @@ const app = express();
 app.use(express.urlencoded( {extended : true}));
 app.use(express.json());
 
-import {router as datosRouter} from './router/datos.js'; 
-import { router as usersRouter } from './router/users.js'; 
+import {router as songsRouter} from './router/songs.js'; 
+import {router as usersRouter } from './router/users.js'; 
 
 const PORT = process.env.PORT ?? 3000
 
@@ -20,5 +20,5 @@ app.listen(PORT, (err)=> {
     );
 });
 
-app.use("/api/datos", datosRouter);
+app.use("/api/songs", songsRouter);
 app.use("/api/users", usersRouter);

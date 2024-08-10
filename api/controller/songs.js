@@ -1,19 +1,18 @@
 //import datos from '../model/ArchivosDeSistema/ArchivosDeSistema/data.json' assert {type: "json"}
-import {Dato} from "../model/ArchivosDeSistema/mongoDB/dato.js"
-//const datos = [];
+import {Song} from "../model/ArchivosDeSistema/mongoDB/song.js"
 
-export const datosController = {
+export const songsController = {
      // Obtiene todos los datos
      async getAll(req, res)
      {
-        const datoCollection = await Dato.find();
-        datoCollection
+        const songCollection = await Song.find();
+        songCollection
         ? res
             .status(200)
-            .json ({ success : true, message : "Lista de datos", data: datoCollection})
+            .json ({ success : true, message : "Lista de canciones", data: songCollection})
         : res
             .status(404)
-            .json ({ success : false, message : "Lista de datos"});
+            .json ({ success : false, message : "Lista de canciones"});
      },
 
     // Obtiene el dato por titulo
@@ -27,22 +26,22 @@ export const datosController = {
                 .json({ sucess: false, message: 'error'});
         try 
         {
-            const datos = await Dato.find({ title : { $regex: title, $options: "i"}});
+            const songs = await Song.find({ title : { $regex: title, $options: "i"}});
 
-            if (!datos.length)
+            if (!songs.length)
             {
                 return res.status(404).json(
                     {
                         sucess: false,
-                        message: `No hay datos ${title}`,
+                        message: `No hay canciones ${title}`,
                     }
                 );
             }
 
             return res.status(200).json({
                 sucess:true,
-                message: "Datos por title",
-                data: datos,
+                message: "Canciones por title",
+                data: songs,
             });
         } 
         catch(err)
@@ -57,7 +56,7 @@ export const datosController = {
     async createOne(req, res)
     {
         const { albumId, title, url, thumbnailUrl, year, enabled} = req.body;
-        const newDato = new Dato({
+        const newSong = new Song({
             albumId, 
             title, 
             url, 
@@ -68,8 +67,8 @@ export const datosController = {
 
         try
         {
-            const savedDato = await newDato.save();
-            res.status(200).json({success: true, message: "Se guardo el dato correctamente.", data : savedDato});
+            const savedSong = await newSong.save();
+            res.status(200).json({success: true, message: "Se guardo la cancion correctamente.", data : savedSong});
         } 
         catch(err)
         {
@@ -80,7 +79,7 @@ export const datosController = {
     },
 
     // Modifica un dato
-    async updateDato(req, res)
+    async updateSong(req, res)
     {
         const allowedFields = [
             "albumId", 
@@ -101,21 +100,21 @@ export const datosController = {
             {
                 return res.status(400).json({
                   success: false,
-                  message: "Campo invalido en el cuerpo del requerimiento. Operacion aborteda.",
+                  message: "Campo invalido en el cuerpo del requerimiento. Operacion abortada.",
                 });
             }
 
-            const dato = await Dato.findByIdAndUpdate(req.params.id, req.body, {new:true,} );
-            if (!dato)
+            const song = await Song.findByIdAndUpdate(req.params.id, req.body, {new:true,} );
+            if (!song)
             {
                 return res.status(404).json({
                     success: false, 
-                    message : `Dato no encontrado`,
+                    message : `Cancion no encontrada`,
                 });
             }
             res
                 .status(200)
-                .json({success: true, message : `Dato modificado`, data:dato});
+                .json({success: true, message : `Cancion modificada`, data:song});
         }
         catch(error)
         {
@@ -132,13 +131,13 @@ export const datosController = {
         try
         {
             console.log(req.params.id);
-            const dato = await Dato.findByIdAndDelete(req.params.id);
-            if (!dato) 
+            const song = await Song.findByIdAndDelete(req.params.id);
+            if (!song) 
             {
                 return res.status(404).json(
                 {
                   success: false,
-                  message: `Dato no encontrado`,
+                  message: `Cancion no encontrada`,
                 });
             }
             res.send(204);

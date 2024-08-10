@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 export const {ObjectId } = mongoose.Types;
 const currentYear = new Date().getUTCFullYear();
 
-const datosSchema = mongoose.Schema(
+const songsSchema = mongoose.Schema(
     {
         albumId : {
             type: Number,
@@ -26,8 +26,8 @@ const datosSchema = mongoose.Schema(
         year:{
             type : Number,
             required: true,
-            min: [1900, "No puede ser menor"],
-            max: [currentYear, `No puede ecceder ${currentYear}`],
+            min: [1900, "No puede ser menor a 1900"],
+            max: [currentYear, `No puede ser mayor de ${currentYear}`],
         },
         enabled :{
             type : Number,
@@ -36,7 +36,7 @@ const datosSchema = mongoose.Schema(
     },
     {timestamp: true}
 );
-datosSchema.set("toJSON", {
+songsSchema.set("toJSON", {
     transform(doc, ret) {
       ret.id = ret._id;
       delete ret._id;
@@ -44,7 +44,7 @@ datosSchema.set("toJSON", {
     },
   });
 //datosSchema.index({title: "text"});
-export const Dato = mongoose.model("Dato", datosSchema);
+export const Song = mongoose.model("Dato", songsSchema);
 
 
 

@@ -1,16 +1,16 @@
 import { Router } from 'express';
 export const router = Router();
-import { datosController } from '../controller/datos.js';
+import { songsController } from '../controller/songs.js';
 import { token } from "../services/jwt.js";
 
-router.get("/", token.validate, datosController.getAll);
+// No validadas por tocken
+router.get("/",  songsController.getAll);
+router.get("/s", songsController.getByTitle);
 
-router.get("/s", datosController.getByTitle);
-
-router.post("/", datosController.createOne);
-router.patch("/:id", datosController.updateDato);
-
-router.delete("/:id",  datosController.deleteOne);
+// Validadas por token
+router.post("/", token.validate, songsController.createOne);
+router.patch("/:id", token.validate, songsController.updateSong);
+router.delete("/:id",  token.validate,songsController.deleteOne);
 
 //router.get("/", (req, res) => {
 //    res.send(libros)
