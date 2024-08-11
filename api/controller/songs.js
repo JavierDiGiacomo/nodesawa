@@ -12,18 +12,17 @@ export const songsController = {
             .json ({ success : true, message : "Lista de canciones", data: songCollection})
         : res
             .status(404)
-            .json ({ success : false, message : "Lista de canciones"});
+            .json ({ success : false, message : "Lista de canciones vacia"});
      },
 
     // Obtiene el dato por titulo
     async getByTitle(req, res) 
     {
         const {title} = req.query;
-        console.log ( title);
         if (!title)
             res
                 .status(400)
-                .json({ sucess: false, message: 'error'});
+                .json({ sucess: false, message: 'Campo titulo inexistente'});
         try 
         {
             const songs = await Song.find({ title : { $regex: title, $options: "i"}});
@@ -47,8 +46,8 @@ export const songsController = {
         catch(err)
         {
             return res
-            .status(500)
-            .json({ success:false, message : `Internal Error : ${err.message}`});
+                .status(500)
+                .json({ success:false, message : `Internal Error : ${err.message}`});
         }
     },
 
@@ -73,8 +72,8 @@ export const songsController = {
         catch(err)
         {
             res
-            .status(400)
-            .json({success: false, message : err.message})
+                .status(400)
+                .json({success: false, message : err.message})
         }
     },
 
@@ -130,7 +129,6 @@ export const songsController = {
     {
         try
         {
-            console.log(req.params.id);
             const song = await Song.findByIdAndDelete(req.params.id);
             if (!song) 
             {
@@ -144,7 +142,10 @@ export const songsController = {
         } 
         catch(err)
         {
-            res.status(500).json({ success: false, message: err.message });
+            res.status(500).json({ 
+                success: false, 
+                message: err.message 
+            });
         }
     }
 };

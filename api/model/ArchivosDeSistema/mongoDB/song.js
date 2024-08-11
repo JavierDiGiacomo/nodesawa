@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 export const {ObjectId } = mongoose.Types;
 const currentYear = new Date().getUTCFullYear();
 
+// Se crea el esquema de la base de datos
 const songsSchema = mongoose.Schema(
     {
         albumId : {
@@ -43,8 +44,7 @@ songsSchema.set("toJSON", {
       delete ret.__v;
     },
   });
-//datosSchema.index({title: "text"});
-export const Song = mongoose.model("Dato", songsSchema);
+export const Song = mongoose.model("Song", songsSchema);
 
 
 
